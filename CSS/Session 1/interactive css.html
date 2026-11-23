@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive CSS Basics Examples - OSC Session 02</title>
+    <!-- Import Google Fonts as an example of Web Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="style.css"> 
+   
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>CSS Basics: Style the Web</h1>
+        <p>Comprehensive practical file for all lecture examples (OSC Session 02)</p>
+    </header>
+
+    <!-- 1. CSS Setup & Syntax -->
+    <section>
+        <h2>1. CSS Ways & Selectors (Setup & Selectors)</h2>
+        <div class="demo-box">
+            <!-- Inline CSS -->
+            <p style="color: orange; font-weight: bold;">1. Inline CSS: This text is styled with style directly inside the tag.</p>
+            <!-- Internal CSS -->
+            <p class="internal-style-text">2. Internal CSS: This text is styled inside the &lt;style&gt; tag above.</p>
+            <p>3. External CSS: Linked to an external file via <code>&lt;link rel="stylesheet" href="style.css"&gt;</code>.</p>
+            <hr>
+            <p><strong>Selectors Examples:</strong></p>
+            <span class="selector-demo">Element Selector</span> | 
+            <span class="my-class-selector">Class Selector (.class)</span> | 
+            <span id="my-id-selector">ID Selector (#id)</span>
+        </div>
+    </section>
+
+    <!-- 2. Text & Colors -->
+    <section>
+        <h2>2. Text & Colors</h2>
+        <div class="demo-box">
+            <p class="text-styling-demo">Text styled with (size, weight, alignment, wavy underline)</p>
+            <p><strong>Same orange color in different formats:</strong></p>
+            <div style="text-align: center;">
+                <span class="color-box c-name">orange</span>
+                <span class="color-box c-hex">#FFA200</span>
+                <span class="color-box c-rgb">rgb(255, 162, 0)</span>
+                <span class="color-box c-hsl">hsl(38, 100%, 50%)</span>
+                <span class="color-box c-rgba">rgba(..., 0.5) transparency</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Backgrounds -->
+    <section>
+        <h2>3. Backgrounds</h2>
+        <div class="code-hint">background-image: url(...); background-size: cover; background-position: center; background-repeat: no-repeat;</div>
+        <div class="bg-demo">
+            Background with a centered image covering the entire area (cover)
+        </div>
+    </section>
+
+    <!-- 4. Fonts -->
+    <section>
+        <h2>4. Font Families (Fonts)</h2>
+        <div class="demo-box" style="direction: ltr; text-align: left;">
+            <p class="font-serif">1. Serif Font (Georgia): Classic look with small lines at ends.</p>
+            <p class="font-sans">2. Sans-serif Font (Montserrat): Clean and modern look.</p>
+            <p class="font-mono">3. Monospace Font (Courier): Fixed-width characters for code.</p>
+            <p class="font-sans font-italic">4. Font Style: Italic & Semi-Bold (font-weight: 600).</p>
+        </div>
+    </section>
+
+    <!-- 5. The Box Model -->
+    <section>
+        <h2>5. The Box Model</h2>
+        <p>From inside out: <strong>Content ➔ Padding ➔ Border ➔ Margin</strong></p>
+        <div class="box-model-wrapper">
+            <small>The yellow area represents the outer Margin space</small>
+            <div class="box-model-element">
+                <small style="color: #000;">The light blue space is Padding, and the blue frame is Border</small>
+                <div class="box-content">
+                    Content<br>
+                    <small>width: 80%; max-width: 400px;</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Display & Hiding -->
+    <section>
+        <h2>6. Display & Visibility</h2>
+        <div class="demo-box">
+            <p><strong>Difference between Block, Inline, and Inline-Block:</strong></p>
+            <div class="disp-block">Block (takes a new line and accepts width)</div>
+            <span class="disp-inline">Inline 1 (on the same line and does not accept width)</span>
+            <span class="disp-inline">Inline 2</span>
+            <br><br>
+            <div class="disp-inline-block">Inline-Block 1<br>(one line + width)</div>
+            <div class="disp-inline-block">Inline-Block 2<br>(one line + width)</div>
+
+            <hr>
+            <p><strong>Difference between <code>display: none</code> and <code>visibility: hidden</code>:</strong></p>
+            <div>
+                <div class="hide-box">Box 1</div>
+                <div class="hide-box use-display-none">Box 2 (display: none)</div>
+                <div class="hide-box">Box 3 (moved to take Box 2's place)</div>
+            </div>
+            <div style="margin-top: 10px;">
+                <div class="hide-box">Box A</div>
+                <div class="hide-box use-visibility-hidden">Box B (hidden)</div>
+                <div class="hide-box">Box C (Box B still reserves its empty space)</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Specificity -->
+    <section>
+        <h2>7. Specificity Battle</h2>
+        <div class="code-hint">
+            &lt;p id="title-battle" class="text-battle battle-p"&gt;Hello&lt;/p&gt;<br>
+            /* p { color: green; }  vs  .text-battle { color: blue; }  vs  #title-battle { color: orange; } */
+        </div>
+        <div class="demo-box">
+            <p id="title-battle" class="text-battle battle-p">Hello! (The winner is orange because #ID is stronger than class and element)</p>
+            <small>Order from strongest to weakest: <strong>Inline Style ➔ #ID ➔ .Class ➔ Element</strong></small>
+        </div>
+    </section>
+
+    <!-- 8. Activities -->
+    <section>
+        <h2>8. Activity Time Solutions</h2>
+        
+        <h3>Activity One: Profile Card</h3>
+        <div class="profile-card">
+            <div class="profile-avatar">A</div>
+            <h3 style="margin: 0; color: #ffa200;">Ada Lovelace</h3>
+            <p style="color: #636e72; margin-top: 5px;">Frontend Learner · OSC</p>
+            <p style="font-size: 14px;">Applied: colors, background, fonts, inner and outer margins, border, and width setting.</p>
+        </div>
+
+        <h3>Activity Two (Challenge B): Three boxes in one row with inline-block</h3>
+        <div class="three-boxes-container">
+            <div class="row-box">Box 1</div>
+            <div class="row-box">Box 2</div>
+            <div class="row-box">Box 3</div>
+        </div>
+    </section>
+
+    <!-- 9. Interactive Hands-On Playground -->
+    <section class="playground-section" id="hands-on-playground">
+        <h2>9. Interactive Hands-On Playground 🛠️</h2>
+        <p style="color: #8b949e; margin-bottom: 18px;">Choose one of the following tasks, and edit the CSS or HTML code directly to see the instant result on the right!</p>
+
+        <!-- Task selection buttons -->
+        <div class="task-tabs">
+            <button class="task-tab-btn active" onclick="loadTask(0)">1. Profile Card Styling</button>
+            <button class="task-tab-btn" onclick="loadTask(1)">2. Display & Visibility Control</button>
+            <button class="task-tab-btn" onclick="loadTask(2)">3. Specificity Battle</button>
+        </div>
+
+        <!-- Current task instructions -->
+        <div class="task-instructions">
+            <h3 id="task-title">Task 1: Profile Card Styling</h3>
+            <p id="task-desc">Modify the <code>.card</code> class properties to add a background, text color, padding, border, and suitable card width.</p>
+        </div>
+
+        <!-- Quick Presets buttons -->
+        <div class="presets-bar">
+            <span class="presets-label">Quick additions to try:</span>
+            <div id="presets-container" style="display: flex; flex-wrap: wrap; gap: 8px;"></div>
+        </div>
+
+        <!-- Split code editor + live preview window -->
+        <div class="playground-grid">
+            <div class="editors-pane">
+                <div class="editor-box">
+                    <div class="editor-header">
+                        <span>HTML Structure</span>
+                        <span class="editor-badge">HTML</span>
+                    </div>
+                    <textarea id="html-editor" class="code-textarea html-input" spellcheck="false" oninput="updatePreview()"></textarea>
+                </div>
+
+                <div class="editor-box">
+                    <div class="editor-header">
+                        <span>CSS Rules (Write your edits here)</span>
+                        <span class="editor-badge">CSS</span>
+                    </div>
+                    <textarea id="css-editor" class="code-textarea" spellcheck="false" oninput="updatePreview()"></textarea>
+                </div>
+            </div>
+
+            <div class="preview-pane">
+                <div class="editor-header">
+                    <span>Live Preview</span>
+                    <span class="editor-badge" style="background-color: #238636;">LIVE</span>
+                </div>
+                <iframe id="live-preview-frame" class="preview-frame" title="Live CSS Preview"></iframe>
+            </div>
+        </div>
+
+        <!-- Reset and Solution buttons -->
+        <div class="playground-actions">
+            <button class="action-btn btn-reset" onclick="resetCurrentTask()">Reset Code</button>
+            <button class="action-btn btn-solution" onclick="showSolution()">Show Suggested Solution ✨</button>
+        </div>
+    </section>
+</div>
+
+<script>
+    // Data for the three practical tasks inspired by the slides
+    const handsOnTasks = [
+        {
+            title: "Task 1: Profile Card Styling",
+            desc: "Edit the .card class properties to give the card a background, text color, font, padding, orange border, and suitable width.",
+            starterHtml: `<div class="card">
+  <h2>Sara Ahmed</h2>
+  <p class="role">Frontend Developer · OSC</p>
+  <p>I am learning web design basics using CSS!</p>
+</div>`,
+            starterCss: `.card {
+  /* Add your properties here */
+  background-color: #f8f9fa;
+  color: #333333;
+  font-family: Arial, sans-serif;
+  padding: 15px;
+  border: 1px dashed #999;
+  width: 90%;
+}
+
+.role {
+  color: #FF6B00;
+  font-weight: bold;
+}`,
+            solutionCss: `.card {
+  background-color: #1e242b;
+  color: #ffffff;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  padding: 25px;
+  margin: 20px auto;
+  border: 3px solid #FFA200;
+  border-radius: 14px;
+  width: 85%;
+  max-width: 340px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.role {
+  color: #FFA200;
+  font-weight: bold;
+}`,
+            presets: [
+                { label: "border: 3px solid #FFA200;", code: "\n.card { border: 3px solid #FFA200; border-radius: 12px; }" },
+                { label: "padding: 25px;", code: "\n.card { padding: 25px; }" },
+                { label: "Dark Card Theme", code: "\n.card { background-color: #1e242b; color: #ffffff; }" },
+                { label: "max-width: 320px; margin: auto;", code: "\n.card { width: 85%; max-width: 320px; margin: 20px auto; }" }
+            ]
+        },
+        {
+            title: "Task 2: Display & Visibility Control",
+            desc: "Try changing display for .box elements between block, inline, and inline-block to place them in one row with specific dimensions, and compare display: none with visibility: hidden.",
+            starterHtml: `<h3>1. Row of boxes (change display):</h3>
+<div class="box">Box 1</div>
+<div class="box">Box 2</div>
+<div class="box">Box 3</div>
+
+<h3>2. Hiding test (Second box):</h3>
+<div class="mini">A</div>
+<div class="mini hide-test">B</div>
+<div class="mini">C</div>`,
+            starterCss: `.box {
+  display: block; /* try inline or inline-block */
+  width: 90px;
+  height: 60px;
+  background-color: #FF6B00;
+  color: white;
+  text-align: center;
+  line-height: 60px;
+  margin: 5px;
+  border-radius: 6px;
+}
+
+.mini {
+  display: inline-block;
+  width: 45px;
+  height: 45px;
+  background: #2c3e50;
+  color: white;
+  text-align: center;
+  line-height: 45px;
+}
+
+.hide-test {
+  /* try display: none; or visibility: hidden; */
+  background: #e74c3c;
+}`,
+            solutionCss: `.box {
+  display: inline-block;
+  width: 90px;
+  height: 60px;
+  background-color: #FF6B00;
+  color: white;
+  text-align: center;
+  line-height: 60px;
+  margin: 5px;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+.mini {
+  display: inline-block;
+  width: 45px;
+  height: 45px;
+  background: #2c3e50;
+  color: white;
+  text-align: center;
+  line-height: 45px;
+}
+
+.hide-test {
+  visibility: hidden; /* hides while keeping its empty space */
+}`,
+            presets: [
+                { label: "display: inline-block;", code: "\n.box { display: inline-block; }" },
+                { label: "display: inline;", code: "\n.box { display: inline; }" },
+                { label: "display: none (removes space)", code: "\n.hide-test { display: none; }" },
+                { label: "visibility: hidden (keeps space)", code: "\n.hide-test { visibility: hidden; }" }
+            ]
+        },
+        {
+            title: "Task 3: Specificity Battle",
+            desc: "The following element has a p tag, a .text class, and an #title ID. Notice which rule wins and why! Try adding inline style or enabling !important.",
+            starterHtml: `<p id="title" class="text">
+  Who will win the color battle?
+</p>
+<p class="hint">Order: Inline > #id > .class > element</p>`,
+            starterCss: `/* 1. Element selector (weakest: 1 point) */
+p {
+  color: green;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+/* 2. Class selector (medium: 10 points) */
+.text {
+  color: blue;
+}
+
+/* 3. ID selector (strongest here: 100 points) */
+#title {
+  color: #FF6B00;
+}
+
+.hint {
+  color: #555;
+  font-size: 14px;
+}`,
+            solutionCss: `p {
+  color: green !important; /* !important overrides normal rules */
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.text {
+  color: blue;
+}
+
+#title {
+  color: #FF6B00;
+}
+
+.hint {
+  color: #555;
+  font-size: 14px;
+}`,
+            presets: [
+                { label: "Enable !important on p", code: "\np { color: green !important; }" },
+                { label: "Change #title color to purple", code: "\n#title { color: purple; }" },
+                { label: "Add a second .text rule (latest wins)", code: "\n.text { color: crimson; }" }
+            ]
+        }
+    ];
+
+    let currentTaskIndex = 0;
+
+    // Load a specific task into the editor
+    function loadTask(index) {
+        currentTaskIndex = index;
+        const task = handsOnTasks[index];
+
+        // Update button states
+        const tabs = document.querySelectorAll('.task-tab-btn');
+        tabs.forEach((btn, i) => {
+            btn.classList.toggle('active', i === index);
+        });
+
+        // Update texts and code
+        document.getElementById('task-title').textContent = task.title;
+        document.getElementById('task-desc').textContent = task.desc;
+        document.getElementById('html-editor').value = task.starterHtml;
+        document.getElementById('css-editor').value = task.starterCss;
+
+        // Build quick addition buttons
+        const presetsContainer = document.getElementById('presets-container');
+        presetsContainer.innerHTML = '';
+        task.presets.forEach(preset => {
+            const chip = document.createElement('button');
+            chip.className = 'preset-chip';
+            chip.textContent = '+ ' + preset.label;
+            chip.onclick = () => {
+                const cssEditor = document.getElementById('css-editor');
+                cssEditor.value += preset.code;
+                updatePreview();
+            };
+            presetsContainer.appendChild(chip);
+        });
+
+        updatePreview();
+    }
+
+    // Update the live preview window (iframe)
+    function updatePreview() {
+        const htmlCode = document.getElementById('html-editor').value;
+        const cssCode = document.getElementById('css-editor').value;
+        const iframe = document.getElementById('live-preview-frame');
+
+        const fullDocument = `
+            <!DOCTYPE html>
+            <html dir="ltr" lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <style>
+                    body {
+                        font-family: 'Segoe UI', Tahoma, sans-serif;
+                        padding: 16px;
+                        margin: 0;
+                        background-color: #ffffff;
+                        color: #222222;
+                    }
+                    ${cssCode}
+                </style>
+            </head>
+            <body>
+                ${htmlCode}
+            </body>
+            </html>
+        `;
+
+        iframe.srcdoc = fullDocument;
+    }
+
+    // Reset current task
+    function resetCurrentTask() {
+        loadTask(currentTaskIndex);
+    }
+
+    // Show suggested solution for current task
+    function showSolution() {
+        const task = handsOnTasks[currentTaskIndex];
+        document.getElementById('html-editor').value = task.starterHtml;
+        document.getElementById('css-editor').value = task.solutionCss;
+        updatePreview();
+    }
+
+    // Run the first task when the page loads
+    window.addEventListener('DOMContentLoaded', () => {
+        loadTask(0);
+    });
+</script>
+
+</body>
+</html>
