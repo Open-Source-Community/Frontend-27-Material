@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CSS Positioning, Effects & Transitions – Interactive Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#ffa100; --primary-2:#ffd400; --pink:#ffd400; --bg:#fff8e6; --card:#fff;
+  --text:#1a1a1a; --muted:#6b6b6b; --border:#efe7d2; --code-bg:#0a0a0a;
+  --font:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'Fira Code',ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+input[type=range],input[type=checkbox]{accent-color:#ffa100}
+body{margin:0;font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.65}
+
+/* ---------- Fixed progress bar (real position:fixed demo) ---------- */
+.progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,#000,#ffa100);z-index:1000}
+
+/* ---------- Header ---------- */
+header{background:linear-gradient(135deg,#ffa100 0%,#ffd400 100%);color:#000;padding:64px 20px 56px;text-align:center;position:relative;overflow:hidden}
+header::before,header::after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.1)}
+header::before{width:320px;height:320px;top:-140px;left:-80px}
+header::after{width:240px;height:240px;bottom:-120px;right:-60px}
+header>*{position:relative;z-index:1}
+header h1{margin:0 0 10px;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;letter-spacing:-.5px;text-shadow:0 2px 12px rgba(255,255,255,.5)}
+header p{margin:0 auto;max-width:620px;opacity:.92}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:24px}
+.chips a{color:#000;text-decoration:none;font-size:13px;font-weight:500;background:rgba(255,255,255,.4);border:1px solid rgba(0,0,0,.25);padding:5px 14px;border-radius:999px;transition:background .25s ease,transform .25s ease}
+.chips a:hover{background:rgba(255,255,255,.75);transform:translateY(-2px)}
+
+/* ---------- Layout ---------- */
+.container{max-width:900px;margin:-28px auto 0;padding:0 16px 80px;position:relative;z-index:2}
+section{background:var(--card);border-radius:14px;border-left:6px solid var(--primary);box-shadow:0 4px 6px rgba(0,0,0,.04),0 10px 30px rgba(0,0,0,.07);padding:28px 30px;margin-bottom:26px;scroll-margin-top:16px}
+section:nth-of-type(3n+2){border-left-color:var(--primary-2)}
+section:nth-of-type(3n+3){border-left-color:#000}
+section h2{margin:0 0 6px;font-size:1.45rem;display:flex;align-items:center;gap:10px}
+section h2 .num{display:inline-grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--primary);color:#000;font-size:.9rem;flex:none}
+section h3{margin:22px 0 8px;font-size:1.05rem}
+section p{margin:8px 0}
+code.i{font-family:var(--mono);font-size:.85em;background:#fff4d6;color:#000000;padding:1px 6px;border-radius:5px}
+table.vals{width:100%;border-collapse:collapse;font-size:.92rem;margin:10px 0}
+table.vals th,table.vals td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+table.vals th{background:#fffdf7;font-weight:600}
+.note{background:#fff8d6;border:1px solid #ffd400;color:#5c4300;border-radius:10px;padding:10px 14px;font-size:.9rem;margin:12px 0}
+
+.code-hint{background:var(--code-bg);color:#efe7d2;font-family:var(--mono);font-size:13px;line-height:1.6;border-radius:10px;padding:14px 16px;margin:14px 0 0;overflow-x:auto;white-space:pre;border-left:4px solid #ffd400}
+.code-hint .c{color:#999999}.code-hint .k{color:#ffd400}.code-hint .v{color:#ffa100}
+.demo-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:16px 0 6px}
+.demo-box{border:2px dashed #ffd98a;background:#fffbf0;border-radius:12px;padding:18px;position:relative}
+
+.btn-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;align-items:center}
+.btn-row button,.mini-btn{font-family:var(--font);font-size:13px;font-weight:600;border:1.5px solid var(--primary);background:#fff;color:#000;padding:6px 14px;border-radius:8px;cursor:pointer;transition:all .2s ease}
+.btn-row button:hover,.mini-btn:hover{background:#fff4d6}
+.btn-row button.active{background:var(--primary);color:#000}
+.ctl{display:grid;grid-template-columns:90px 1fr 56px;gap:8px;align-items:center;font-size:13px;margin:4px 0}
+.ctl output{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.ctl input[type=range]{width:100%}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:700px){.two-col{grid-template-columns:1fr}section{padding:22px 18px}}
+
+/* ---------- Demo: position ---------- */
+.pos-stage{position:relative;height:230px;background:#fff4d6;border:2px solid #ffa100;border-radius:10px;padding:10px;overflow:hidden}
+.pos-box{width:130px;height:44px;margin-bottom:8px;border-radius:8px;background:#ffa100;color:#000;display:grid;place-items:center;font-size:13px;font-weight:600}
+.pos-box.target{background:#ffd400}
+.pos-tag{position:absolute;right:10px;top:8px;font-size:12px;color:#000000;font-family:var(--mono)}
+
+/* relative + absolute badge */
+.ra-card{position:relative;width:240px;margin:14px auto;padding:22px;background:#fff;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.1)}
+.ra-badge{position:absolute;top:-12px;right:-12px;background:#000000;color:#fff;font-size:12px;font-weight:700;padding:4px 12px;border-radius:999px}
+.ra-corner{position:absolute;bottom:10px;right:12px;font-size:12px;color:var(--muted)}
+
+/* fixed */
+.fixed-btn{position:fixed;right:22px;bottom:22px;z-index:999;width:52px;height:52px;border-radius:50%;border:0;background:linear-gradient(135deg,#ffa100,#ffd400);color:#000;font-size:22px;cursor:pointer;box-shadow:0 8px 20px rgba(255,161,0,.45);transition:transform .25s ease,opacity .25s ease}
+.fixed-btn:hover{transform:translateY(-4px) scale(1.08)}
+.fixed-btn.hide{opacity:0;pointer-events:none;transform:scale(.6)}
+
+/* sticky */
+.st-scroll{height:220px;overflow:auto;border-radius:10px;border:2px solid #ffd98a;background:#fff}
+.st-scroll h4{position:sticky;top:0;margin:0;padding:8px 14px;background:#ffa100;color:#000;font-size:14px}
+.st-scroll p{margin:0;padding:10px 14px;border-bottom:1px solid var(--border);font-size:14px}
+
+/* z-index */
+.z-stage{position:relative;height:190px;background:#fff4d6;border-radius:10px;overflow:hidden}
+.z-box{position:absolute;width:130px;height:100px;border-radius:12px;color:#fff;font-weight:700;display:grid;place-items:center;box-shadow:0 6px 14px rgba(0,0,0,.25)}
+.z-a{left:30px;top:20px;background:#000000}.z-b{left:100px;top:50px;background:#ffa100;color:#000}.z-c{left:170px;top:20px;background:#ffd400;color:#000}
+.zc-wrap{position:relative;height:130px;background:#fffdf7;border-radius:10px}
+.zc-p{position:absolute;width:170px;height:90px;border-radius:10px;padding:8px;font-size:12px;color:#000}
+.zc-p1{left:20px;top:16px;background:#ffa100;z-index:1}
+.zc-p2{left:120px;top:36px;background:#ffd400;z-index:2}
+.zc-child{position:absolute;right:-60px;bottom:-12px;width:90px;height:40px;background:#000;color:#fff;border-radius:8px;z-index:999;display:grid;place-items:center;font-weight:700}
+
+/* pseudo */
+.ps-quote{position:relative;padding:14px 20px 14px 56px;background:#fff;border-radius:10px;font-style:italic;margin:0}
+.ps-quote::before{content:"\201C";position:absolute;left:14px;top:-4px;font-size:64px;color:#ffa100;font-family:Georgia,serif;line-height:1}
+.ps-quote::after{content:" — CSS";color:var(--muted);font-style:normal;font-size:13px}
+.ps-link{position:relative;color:#000;text-decoration:none;font-weight:600}
+.ps-link::after{content:"";position:absolute;left:0;bottom:-3px;width:100%;height:2px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .3s ease-in-out}
+.ps-link:hover::after{transform:scaleX(1)}
+.ps-label{display:inline-block;position:relative;padding:8px 16px;background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.ps-label::after{content:attr(data-badge);position:absolute;top:-10px;right:-10px;background:#000000;color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px}
+.ps-list{list-style:none;padding:0;margin:0}
+.ps-list li{padding-left:28px;position:relative;margin:4px 0}
+.ps-list li::before{content:"\2714";position:absolute;left:0;color:#ffa100;font-weight:700}
+
+/* pseudo-classes */
+.pk-btn{padding:12px 26px;border:2px solid #000;background:#fff;color:#000;font-family:var(--font);font-weight:600;border-radius:10px;cursor:pointer;transition:all .2s ease}
+.pk-btn:hover{background:#ffd400;transform:translateY(-3px)}
+.pk-btn:active{transform:translateY(0) scale(.96);background:#ffa100}
+.pk-btn:focus-visible{outline:3px solid #000;outline-offset:3px}
+.pk-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;background:#fff}
+.pk-form{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:14px;border:2px solid #ddd;border-radius:12px;background:#fff;transition:border-color .2s ease,box-shadow .2s ease}
+.pk-form:focus-within{border-color:#ffa100;box-shadow:0 0 0 4px rgba(255,161,0,.25)}
+.pk-input{padding:10px 14px;border:2px solid #ccc;border-radius:8px;font:inherit;outline:none;transition:border-color .2s ease,box-shadow .2s ease}
+.pk-input:focus{border-color:#ffa100;box-shadow:0 0 0 3px rgba(255,161,0,.35)}
+.pk-input:disabled{background:#eee;cursor:not-allowed}
+.pk-list{list-style:none;margin:0;padding:0;border-radius:10px;overflow:hidden;border:2px solid #000;background:#fff}
+.pk-list li{padding:10px 16px;border-bottom:1px solid #eee;transition:background .2s ease}
+.pk-list li:last-child{border-bottom:0}
+.pk-switch{position:relative;display:inline-block}
+.pk-switch input{position:absolute;opacity:0;width:1px;height:1px}
+.pk-switch label{position:relative;display:inline-block;padding-left:60px;line-height:28px;cursor:pointer;user-select:none}
+.pk-switch label::before{content:"";position:absolute;left:0;top:0;width:48px;height:28px;border-radius:999px;background:#ccc;transition:background .25s ease}
+.pk-switch label::after{content:"";position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.4);transition:transform .25s ease}
+.pk-switch input:checked + label::before{background:#ffa100}
+.pk-switch input:checked + label::after{transform:translateX(20px)}
+.pk-switch input:focus-visible + label::before{outline:3px solid #000;outline-offset:2px}
+
+/* transitions */
+.tr-stage{--dur:1s;--delay:0s;background:#fff8e6;border-radius:10px;padding:12px}
+.tr-row{display:grid;grid-template-columns:130px 1fr;align-items:center;gap:10px;margin:6px 0;font-size:12px;font-family:var(--mono)}
+.tr-track{position:relative;height:32px;background:#efe7d2;border-radius:999px}
+.tr-knob{position:absolute;left:3px;top:3px;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#ffa100,#ffd400);transition:left var(--dur) ease var(--delay)}
+.tr-stage.go .tr-knob{left:calc(100% - 29px)}
+.tr-btn{padding:12px 26px;border:0;border-radius:10px;background:#ffa100;color:#000;font-family:var(--font);font-weight:600;cursor:pointer;box-shadow:0 2px 6px rgba(255,161,0,.3);transition:background .3s ease,transform .3s ease,box-shadow .3s ease}
+.tr-btn:hover{background:#ffd400;transform:translateY(-4px);box-shadow:0 12px 20px rgba(255,212,0,.35)}
+.tr-stagger{display:flex;gap:10px;margin-top:6px}
+.tr-stagger span{width:46px;height:46px;border-radius:10px;background:#ffa100;transition:transform .4s ease,background .4s ease}
+.tr-stagger span:nth-child(2){transition-delay:.1s}.tr-stagger span:nth-child(3){transition-delay:.2s}.tr-stagger span:nth-child(4){transition-delay:.3s}.tr-stagger span:nth-child(5){transition-delay:.4s}
+.tr-stagger:hover span{transform:translateY(-16px) rotate(12deg);background:#ffd400}
+
+/* opacity */
+.op-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:12px}
+.op-bg{height:120px;border-radius:10px;background:repeating-linear-gradient(45deg,#000,#000 10px,#fff 10px,#fff 20px);display:grid;place-items:center;padding:10px}
+.op-box{background:#ffa100;color:#000;font-weight:700;padding:14px 20px;border-radius:10px;text-align:center}
+
+/* overflow */
+.ov-box{width:230px;height:110px;border:3px solid #ffa100;border-radius:8px;background:#fff;padding:10px;font-size:14px}
+.ov-wrap{padding:20px;background:repeating-linear-gradient(45deg,#fff8e6,#fff8e6 10px,#fff 10px,#fff 20px);border-radius:10px;min-height:170px}
+.ell{width:240px;padding:8px 12px;background:#fff;border-radius:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border:1px solid var(--border)}
+
+/* shadows */
+.sh-stage{display:grid;place-items:center;min-height:190px;background:#fff4d6;border-radius:10px}
+.sh-box{width:150px;height:100px;background:#fff;border-radius:14px;display:grid;place-items:center;font-weight:600;color:#444444}
+.tx-stage{display:grid;place-items:center;min-height:120px;background:#1a1a1a;border-radius:10px}
+.tx-demo{font-size:3rem;font-weight:800;color:#fff;margin:0}
+
+/* ---------- Playground ---------- */
+.playground{background:#000000;color:#efe7d2;border-radius:16px;padding:28px 26px 30px;margin-top:40px;box-shadow:0 20px 50px rgba(0,0,0,.45);border-left:6px solid #ffd400}
+.playground h2{margin:0 0 4px;font-size:1.5rem;color:#fff}
+.playground>p{color:#999999;margin:0 0 18px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.tabs button{font-family:var(--font);font-weight:600;font-size:13px;padding:8px 16px;border-radius:8px;background:#1a1a1a;color:#cccccc;border:1px solid #333333;cursor:pointer;transition:all .2s ease}
+.tabs button:hover{background:#2a2a2a}
+.tabs button.active{background:linear-gradient(135deg,#ffa100,#ffd400);color:#000;border-color:transparent}
+.lvl{font-size:10px;opacity:.85;margin-left:6px;text-transform:uppercase;letter-spacing:.06em}
+.instr{background:#111111;border:1px solid #1a1a1a;border-left:4px solid #ffd400;border-radius:10px;padding:14px 18px;font-size:14px;margin-bottom:14px}
+.instr h3{margin:0 0 6px;font-size:1rem;color:#ffd400}
+.instr ol{margin:6px 0 0;padding-left:20px}
+.instr code{font-family:var(--mono);font-size:12px;background:#1a1a1a;color:#ffd400;padding:1px 6px;border-radius:4px}
+.presets{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:14px}
+.presets span{font-size:12px;color:#999999;margin-right:4px}
+.presets button{font-family:var(--mono);font-size:12px;background:#0a0a0a;color:#ffd400;border:1px solid #333333;border-radius:6px;padding:4px 10px;cursor:pointer;transition:all .2s ease}
+.presets button:hover{border-color:#ffd400;background:#1f1a00}
+.ide{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pane{display:flex;flex-direction:column;min-width:0}
+.pane label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;background:#1a1a1a;border-radius:8px 8px 0 0;color:#999999;display:flex;justify-content:space-between}
+.pane label b{color:#ffd400}.pane label i{font-style:normal;color:#ffd400}
+.pane textarea{font-family:var(--mono);font-size:13px;line-height:1.55;height:290px;resize:vertical;background:#0a0a0a;color:#efe7d2;border:1px solid #1a1a1a;border-radius:0 0 8px 8px;padding:12px;outline:none;tab-size:2;width:100%}
+.pane textarea:focus{border-color:#ffa100}
+.preview{margin-top:12px}
+.preview iframe{width:100%;height:340px;border:0;border-radius:0 0 8px 8px;background:#fff;display:block}
+.ctrls{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;align-items:center}
+.ctrls button{font-family:var(--font);font-weight:600;font-size:14px;padding:9px 20px;border-radius:8px;border:0;cursor:pointer;transition:transform .2s ease,filter .2s ease}
+.ctrls button:hover{transform:translateY(-2px);filter:brightness(1.1)}
+.b-reset{background:#333333;color:#fff}.b-sol{background:linear-gradient(135deg,#ffa100,#ffd400);color:#000000}
+.ctrls .msg{font-size:13px;color:#999999}
+@media(max-width:760px){.ide{grid-template-columns:1fr}}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:0 0 40px}
+</style>
+</head>
+<body>
+
+<div class="progress" id="prog"></div>
+<button class="fixed-btn" id="toTop" title="position: fixed demo – back to top" aria-label="Back to top">↑</button>
+
+<header>
+  <h1>CSS Positioning, Effects &amp; Transitions</h1>
+  <p>An interactive, hands-on study guide: <b>position</b>, <b>z-index</b>, <b>pseudo-elements</b>, <b>transitions</b>, <b>opacity</b>, <b>overflow</b> and <b>shadows</b>. Play with every demo, then practise in the live playground at the end.</p>
+  <div class="chips">
+    <a href="#position">Position</a><a href="#relabs">Relative &amp; Absolute</a><a href="#fixed">Fixed</a><a href="#sticky">Sticky</a><a href="#zindex">z-index</a>
+    <a href="#pseudo">Pseudo-elements</a><a href="#pseudoclasses">Pseudo-classes</a><a href="#transitions">Transitions</a><a href="#opacity">Opacity</a><a href="#overflow">Overflow</a><a href="#shadows">Shadows</a>
+    <a href="#activities">Activities</a><a href="#playground">Playground</a>
+  </div>
+</header>
+
+<main class="container">
+
+<!-- 1 POSITION -->
+<section id="position">
+  <h2><span class="num">1</span>position: static (and how all values compare)</h2>
+  <p>The <code class="i">position</code> property decides how an element is placed in the page. <code class="i">static</code> is the default: the element follows the normal flow and <b>ignores</b> <code class="i">top / right / bottom / left</code> and <code class="i">z-index</code>.</p>
+  <table class="vals">
+    <tr><th>Value</th><th>Flow</th><th>Offsets are measured from…</th></tr>
+    <tr><td><code class="i">static</code></td><td>Stays in flow</td><td>Offsets are ignored</td></tr>
+    <tr><td><code class="i">relative</code></td><td>Stays in flow (original space is kept)</td><td>Its own normal position</td></tr>
+    <tr><td><code class="i">absolute</code></td><td>Removed from flow</td><td>Nearest positioned ancestor (else the page)</td></tr>
+    <tr><td><code class="i">fixed</code></td><td>Removed from flow</td><td>The browser window (viewport)</td></tr>
+    <tr><td><code class="i">sticky</code></td><td>In flow until a scroll threshold is hit</td><td>Its scroll container</td></tr>
+  </table>
+  <div class="code-hint" id="posCode"></div>
+  <div class="demo-label">Live demo – change the orange box</div>
+  <div class="demo-box">
+    <div class="btn-row" id="posBtns">
+      <button data-pos="static" class="active">static</button><button data-pos="relative">relative</button><button data-pos="absolute">absolute</button>
+    </div>
+    <div class="ctl"><span>top</span><input type="range" id="posTop" min="0" max="150" value="20"><output id="posTopO">20px</output></div>
+    <div class="ctl"><span>left</span><input type="range" id="posLeft" min="0" max="300" value="40"><output id="posLeftO">40px</output></div>
+    <div class="pos-stage" id="posStage">
+      <span class="pos-tag">container (position: relative)</span>
+      <div class="pos-box">Box 1</div>
+      <div class="pos-box target" id="posTarget">Box 2 (target)</div>
+      <div class="pos-box">Box 3</div>
+    </div>
+  </div>
+  <div class="note">Watch Box 3: with <b>relative</b> it keeps the gap where Box 2 was; with <b>absolute</b> it jumps up because Box 2 left the flow.</div>
+</section>
+
+<!-- 2 RELATIVE & ABSOLUTE -->
+<section id="relabs">
+  <h2><span class="num">2</span>relative + absolute: the classic pair</h2>
+  <p>Give the parent <code class="i">position: relative</code> to make it the <b>anchor</b>, then place the child with <code class="i">position: absolute</code>. Without a positioned parent, the child would be placed relative to the whole page.</p>
+  <div class="code-hint"><span class="c">/* parent = anchor */</span>
+.card  { <span class="k">position</span>: <span class="v">relative</span>; }
+
+<span class="c">/* child = placed inside the anchor */</span>
+.badge { <span class="k">position</span>: <span class="v">absolute</span>;
+         <span class="k">top</span>: <span class="v">-12px</span>;
+         <span class="k">right</span>: <span class="v">-12px</span>; }
+.note  { <span class="k">position</span>: <span class="v">absolute</span>;
+         <span class="k">bottom</span>: <span class="v">10px</span>; <span class="k">right</span>: <span class="v">12px</span>; }</div>
+  <div class="demo-label">Live preview</div>
+  <div class="demo-box">
+    <div class="ra-card">
+      <span class="ra-badge">NEW</span>
+      <h3 style="margin:0 0 6px">Wireless Headphones</h3>
+      <p style="margin:0 0 18px;font-size:14px;color:#6b6b6b">The badge and the note are absolutely positioned inside this relative card.</p>
+      <span class="ra-corner">bottom-right note</span>
+    </div>
+  </div>
+  <div class="note">Tip: <code class="i">inset: 0</code> is a shorthand for <code class="i">top:0; right:0; bottom:0; left:0</code>. It is perfect for overlays.</div>
+</section>
+
+<!-- 3 FIXED -->
+<section id="fixed">
+  <h2><span class="num">3</span>position: fixed</h2>
+  <p>A fixed element is pinned to the <b>viewport</b>: it does not move when the page scrolls. Typical uses: navbars, chat buttons, cookie banners, progress bars.</p>
+  <div class="code-hint">.to-top { <span class="k">position</span>: <span class="v">fixed</span>;
+          <span class="k">right</span>: <span class="v">22px</span>;
+          <span class="k">bottom</span>: <span class="v">22px</span>;
+          <span class="k">z-index</span>: <span class="v">999</span>; }
+
+.progress { <span class="k">position</span>: <span class="v">fixed</span>; <span class="k">top</span>: <span class="v">0</span>; <span class="k">left</span>: <span class="v">0</span>; <span class="k">height</span>: <span class="v">4px</span>; }</div>
+  <div class="demo-label">Live preview – this page already uses it</div>
+  <div class="demo-box">
+    <p style="margin-top:0">Scroll the page: the gradient <b>progress bar</b> at the very top and the round <b>↑ button</b> at the bottom-right are both <code class="i">position: fixed</code>.</p>
+    <div class="btn-row"><button id="toggleFixed">Hide / show the fixed button</button></div>
+  </div>
+  <div class="note">A fixed element is removed from the flow, so give the page some top/bottom padding so it doesn't cover content.</div>
+</section>
+
+<!-- 4 STICKY -->
+<section id="sticky">
+  <h2><span class="num">4</span>position: sticky</h2>
+  <p>Sticky is a hybrid: the element behaves like <code class="i">relative</code> until you scroll past a threshold (<code class="i">top: 0</code>), then it "sticks" like <code class="i">fixed</code> — but only inside its parent container. You <b>must</b> set at least one offset such as <code class="i">top</code>.</p>
+  <div class="code-hint">.section-title { <span class="k">position</span>: <span class="v">sticky</span>;
+                 <span class="k">top</span>: <span class="v">0</span>;   <span class="c">/* required! */</span>
+                 <span class="k">background</span>: <span class="v">#ffa100</span>; }</div>
+  <div class="demo-label">Live preview – scroll inside the box</div>
+  <div class="demo-box">
+    <div class="st-scroll">
+      <h4>Group A</h4><p>Item A1</p><p>Item A2</p><p>Item A3</p><p>Item A4</p>
+      <h4>Group B</h4><p>Item B1</p><p>Item B2</p><p>Item B3</p><p>Item B4</p>
+      <h4>Group C</h4><p>Item C1</p><p>Item C2</p><p>Item C3</p><p>Item C4</p>
+    </div>
+  </div>
+  <div class="note">If sticky "doesn't work", check that no ancestor has <code class="i">overflow: hidden</code> and that the parent is taller than the sticky element.</div>
+</section>
+
+<!-- 5 Z-INDEX -->
+<section id="zindex">
+  <h2><span class="num">5</span>z-index &amp; stacking</h2>
+  <p><code class="i">z-index</code> controls which overlapping element is on top. Higher numbers win. It only works on <b>positioned</b> elements (anything except <code class="i">static</code>) and on flex/grid items. If values tie, the element that comes later in the HTML is on top.</p>
+  <div class="code-hint">.a { <span class="k">position</span>: <span class="v">absolute</span>; <span class="k">z-index</span>: <span class="v">1</span>; }
+.b { <span class="k">position</span>: <span class="v">absolute</span>; <span class="k">z-index</span>: <span class="v">2</span>; }
+.c { <span class="k">position</span>: <span class="v">absolute</span>; <span class="k">z-index</span>: <span class="v">3</span>; }  <span class="c">/* on top */</span></div>
+  <div class="demo-label">Live preview – drag the sliders</div>
+  <div class="demo-box">
+    <div class="ctl"><span>A (black)</span><input type="range" id="zA" min="0" max="9" value="1"><output id="zAo">1</output></div>
+    <div class="ctl"><span>B (orange)</span><input type="range" id="zB" min="0" max="9" value="2"><output id="zBo">2</output></div>
+    <div class="ctl"><span>C (yellow)</span><input type="range" id="zC" min="0" max="9" value="3"><output id="zCo">3</output></div>
+    <div class="z-stage">
+      <div class="z-box z-a" id="zBoxA">A</div><div class="z-box z-b" id="zBoxB">B</div><div class="z-box z-c" id="zBoxC">C</div>
+    </div>
+  </div>
+
+  <h3>Stacking contexts: the gotcha</h3>
+  <p>A child can never escape its parent's stacking context. Below, the black child has <code class="i">z-index: 999</code> but its parent (orange, z-index 1) is below the yellow box (z-index 2), so the black child is still hidden behind it.</p>
+  <div class="demo-box">
+    <div class="zc-wrap">
+      <div class="zc-p zc-p1">Parent 1 (z-index: 1)<div class="zc-child">z: 999</div></div>
+      <div class="zc-p zc-p2">Parent 2 (z-index: 2)</div>
+    </div>
+  </div>
+  <div class="note">A new stacking context is created by <code class="i">position</code> + <code class="i">z-index</code>, <code class="i">opacity &lt; 1</code>, <code class="i">transform</code>, <code class="i">filter</code>, and <code class="i">isolation: isolate</code>.</div>
+</section>
+
+<!-- 6 PSEUDO -->
+<section id="pseudo">
+  <h2><span class="num">6</span>Pseudo-elements: ::before &amp; ::after</h2>
+  <p><code class="i">::before</code> and <code class="i">::after</code> create a <b>virtual child element</b> inside the selected element — before or after its content. They <b>require</b> the <code class="i">content</code> property (use <code class="i">""</code> for decoration). They are inline by default, and often combined with <code class="i">position: absolute</code>.</p>
+  <div class="code-hint">.quote::before { <span class="k">content</span>: <span class="v">"\201C"</span>; <span class="k">position</span>: <span class="v">absolute</span>; <span class="k">font-size</span>: <span class="v">64px</span>; }
+.link::after   { <span class="k">content</span>: <span class="v">""</span>; <span class="k">position</span>: <span class="v">absolute</span>; <span class="k">bottom</span>: <span class="v">-3px</span>;
+                 <span class="k">width</span>: <span class="v">100%</span>; <span class="k">height</span>: <span class="v">2px</span>; <span class="k">transform</span>: <span class="v">scaleX(0)</span>; }
+.link:hover::after { <span class="k">transform</span>: <span class="v">scaleX(1)</span>; }
+.label::after  { <span class="k">content</span>: <span class="v">attr(data-badge)</span>; }   <span class="c">/* reads an HTML attribute */</span>
+li::before     { <span class="k">content</span>: <span class="v">"\2714"</span>; <span class="k">color</span>: <span class="v">#ffa100</span>; }</div>
+  <div class="demo-label">Live preview</div>
+  <div class="demo-box">
+    <div class="two-col">
+      <div>
+        <blockquote class="ps-quote">Pseudo-elements add decoration without extra HTML.</blockquote>
+        <p style="margin-top:18px">Hover this: <a href="#pseudo" class="ps-link">animated underline link</a></p>
+      </div>
+      <div>
+        <span class="ps-label" data-badge="3">Inbox</span>
+        <ul class="ps-list" style="margin-top:16px"><li>Learn position</li><li>Learn z-index</li><li>Learn pseudo-elements</li></ul>
+      </div>
+    </div>
+  </div>
+  <div class="note">Pseudo-elements (<code class="i">::</code>) differ from pseudo-classes (<code class="i">:hover</code>). The double colon is the modern syntax. Pseudo-classes come next.</div>
+</section>
+
+<!-- 6b PSEUDO-CLASSES -->
+<section id="pseudoclasses">
+  <h2><span class="num">7</span>Pseudo-classes</h2>
+  <p>A pseudo-class (single colon <code class="i">:</code>) selects an element <b>in a certain state or position</b> — hovered, focused, checked, first in its list… It styles the element itself; it doesn't create a new one like <code class="i">::before</code> does.</p>
+  <table class="vals">
+    <tr><th>Group</th><th>Pseudo-classes</th><th>Selects…</th></tr>
+    <tr><td>User action</td><td><code class="i">:hover</code> <code class="i">:active</code> <code class="i">:focus</code> <code class="i">:focus-visible</code> <code class="i">:focus-within</code></td><td>Mouse over, being pressed, keyboard/click focus, a parent containing the focus</td></tr>
+    <tr><td>Form state</td><td><code class="i">:checked</code> <code class="i">:disabled</code> <code class="i">:required</code> <code class="i">:valid</code> <code class="i">:invalid</code></td><td>Inputs by their state</td></tr>
+    <tr><td>Position</td><td><code class="i">:first-child</code> <code class="i">:last-child</code> <code class="i">:nth-child(n)</code> <code class="i">:only-child</code></td><td>Elements by their place among siblings</td></tr>
+    <tr><td>Logic</td><td><code class="i">:not()</code> <code class="i">:is()</code> <code class="i">:has()</code></td><td>Exclude, group or match by contents</td></tr>
+  </table>
+  <div class="code-hint">.btn:hover    { <span class="k">background</span>: <span class="v">#ffd400</span>; }                  <span class="c">/* mouse over */</span>
+.btn:active   { <span class="k">transform</span>: <span class="v">scale(.96)</span>; }                   <span class="c">/* while pressed */</span>
+.btn:focus-visible { <span class="k">outline</span>: <span class="v">3px solid #000</span>; }            <span class="c">/* keyboard focus */</span>
+.btn:disabled { <span class="k">opacity</span>: <span class="v">.4</span>; }
+.form:focus-within { <span class="k">border-color</span>: <span class="v">#ffa100</span>; }          <span class="c">/* a child has focus */</span></div>
+  <div class="demo-label">Live preview – hover, press, Tab to focus, click the field</div>
+  <div class="demo-box">
+    <div class="pk-form">
+      <button class="pk-btn" id="pkBtn">Hover / press me</button>
+      <input class="pk-input" id="pkInput" placeholder="Click to focus…">
+      <label style="font-size:13px"><input type="checkbox" id="pkDis"> disable both</label>
+    </div>
+    <p style="font-size:13px;color:#6b6b6b;margin:10px 0 0">The whole form gets an orange border while the input has focus (<code class="i">:focus-within</code>).</p>
+  </div>
+
+  <h3>Structural: :first-child, :last-child, :nth-child()</h3>
+  <p><code class="i">:nth-child(odd)</code> / <code class="i">(even)</code> are great for zebra stripes. <code class="i">(3n)</code> picks every 3rd item, <code class="i">(n+3)</code> picks the 3rd and everything after it, and <code class="i">:not(...)</code> excludes.</p>
+  <div class="code-hint" id="pkCode"></div>
+  <div class="demo-box">
+    <div class="btn-row" id="pkBtns">
+      <button data-sel="li:first-child" class="active">:first-child</button>
+      <button data-sel="li:last-child">:last-child</button>
+      <button data-sel="li:nth-child(odd)">:nth-child(odd)</button>
+      <button data-sel="li:nth-child(even)">:nth-child(even)</button>
+      <button data-sel="li:nth-child(3)">:nth-child(3)</button>
+      <button data-sel="li:nth-child(3n)">:nth-child(3n)</button>
+      <button data-sel="li:nth-child(n+4)">:nth-child(n+4)</button>
+      <button data-sel="li:not(:first-child)">:not(:first-child)</button>
+    </div>
+    <ul class="pk-list"><li>Item 1</li><li>Item 2</li><li>Item 3</li><li>Item 4</li><li>Item 5</li><li>Item 6</li></ul>
+  </div>
+
+  <h3>:checked + pseudo-elements = custom toggle</h3>
+  <p>Hide the real checkbox, then style the label's <code class="i">::before</code> (track) and <code class="i">::after</code> (knob) based on <code class="i">input:checked + label</code>. The <code class="i">+</code> is the adjacent-sibling combinator.</p>
+  <div class="code-hint">.switch input   { <span class="k">position</span>: <span class="v">absolute</span>; <span class="k">opacity</span>: <span class="v">0</span>; }
+.switch label::before { <span class="k">content</span>: <span class="v">""</span>; <span class="k">background</span>: <span class="v">#ccc</span>; <span class="k">transition</span>: <span class="v">background .25s</span>; }
+.switch label::after  { <span class="k">content</span>: <span class="v">""</span>; <span class="k">background</span>: <span class="v">#fff</span>; <span class="k">transition</span>: <span class="v">transform .25s</span>; }
+.switch input:checked + label::before { <span class="k">background</span>: <span class="v">#ffa100</span>; }
+.switch input:checked + label::after  { <span class="k">transform</span>: <span class="v">translateX(20px)</span>; }</div>
+  <div class="demo-box">
+    <div class="pk-switch"><input type="checkbox" id="pkSw"><label for="pkSw">Notifications</label></div>
+  </div>
+  <div class="note">Order matters for link/button states: if you write <code class="i">:hover</code> after <code class="i">:active</code>, hover wins while pressing. Use the order <b>link → visited → hover → focus → active</b>.</div>
+</section>
+
+<!-- 7 TRANSITIONS -->
+<section id="transitions">
+  <h2><span class="num">8</span>Transitions</h2>
+  <p>A transition animates a property smoothly from its old value to its new value when it changes (on <code class="i">:hover</code>, on a class toggle, etc.).</p>
+  <table class="vals">
+    <tr><th>Property</th><th>Meaning</th><th>Example</th></tr>
+    <tr><td><code class="i">transition-property</code></td><td>Which property to animate</td><td><code class="i">background, transform</code> or <code class="i">all</code></td></tr>
+    <tr><td><code class="i">transition-duration</code></td><td>How long it takes</td><td><code class="i">0.3s</code>, <code class="i">300ms</code></td></tr>
+    <tr><td><code class="i">transition-timing-function</code></td><td>The speed curve</td><td><code class="i">ease</code>, <code class="i">linear</code>, <code class="i">ease-in</code>, <code class="i">ease-out</code>, <code class="i">ease-in-out</code>, <code class="i">cubic-bezier()</code></td></tr>
+    <tr><td><code class="i">transition-delay</code></td><td>Wait before starting</td><td><code class="i">0.2s</code></td></tr>
+  </table>
+  <div class="code-hint" id="trCode"></div>
+  <div class="demo-label">Live preview – tune duration &amp; delay, then press Play</div>
+  <div class="demo-box">
+    <div class="ctl"><span>duration</span><input type="range" id="trDur" min="0.1" max="3" step="0.1" value="1"><output id="trDurO">1s</output></div>
+    <div class="ctl"><span>delay</span><input type="range" id="trDel" min="0" max="2" step="0.1" value="0"><output id="trDelO">0s</output></div>
+    <div class="btn-row" style="margin-top:10px"><button id="trPlay">▶ Play / reverse</button></div>
+    <div class="tr-stage" id="trStage">
+      <div class="tr-row"><span>ease</span><div class="tr-track"><div class="tr-knob" style="transition-timing-function:ease"></div></div></div>
+      <div class="tr-row"><span>linear</span><div class="tr-track"><div class="tr-knob" style="transition-timing-function:linear"></div></div></div>
+      <div class="tr-row"><span>ease-in</span><div class="tr-track"><div class="tr-knob" style="transition-timing-function:ease-in"></div></div></div>
+      <div class="tr-row"><span>ease-out</span><div class="tr-track"><div class="tr-knob" style="transition-timing-function:ease-out"></div></div></div>
+      <div class="tr-row"><span>ease-in-out</span><div class="tr-track"><div class="tr-knob" style="transition-timing-function:ease-in-out"></div></div></div>
+      <div class="tr-row"><span>cubic-bezier (bounce)</span><div class="tr-track"><div class="tr-knob" style="transition-timing-function:cubic-bezier(.68,-.55,.27,1.55)"></div></div></div>
+    </div>
+  </div>
+
+  <h3>Hover transition &amp; staggered delay</h3>
+  <div class="demo-box">
+    <button class="tr-btn">Hover me</button>
+    <p style="font-size:13px;color:#6b6b6b;margin:14px 0 0">Staggered with <code class="i">transition-delay</code> – hover the squares:</p>
+    <div class="tr-stagger"><span></span><span></span><span></span><span></span><span></span></div>
+  </div>
+  <div class="code-hint">.btn { <span class="k">transition</span>: <span class="v">background .3s ease, transform .3s ease, box-shadow .3s ease</span>; }
+.btn:hover { <span class="k">transform</span>: <span class="v">translateY(-4px)</span>; }
+
+.box:nth-child(2) { <span class="k">transition-delay</span>: <span class="v">.1s</span>; }
+.box:nth-child(3) { <span class="k">transition-delay</span>: <span class="v">.2s</span>; }</div>
+  <div class="note">Put the <code class="i">transition</code> on the <b>base</b> state (not only on <code class="i">:hover</code>) so it animates both in and out. Prefer animating <code class="i">transform</code> and <code class="i">opacity</code> for smooth performance.</div>
+</section>
+
+<!-- 8 OPACITY -->
+<section id="opacity">
+  <h2><span class="num">9</span>opacity</h2>
+  <p><code class="i">opacity</code> goes from <code class="i">0</code> (invisible) to <code class="i">1</code> (fully visible). It affects the <b>whole element including its children and text</b>. To make only the background transparent use <code class="i">rgba()</code> or an 8-digit hex color.</p>
+  <div class="code-hint">.fade   { <span class="k">opacity</span>: <span class="v">0.5</span>; }                         <span class="c">/* box + text fade */</span>
+.glass  { <span class="k">background</span>: <span class="v">rgba(255,161,0, 0.5)</span>; }        <span class="c">/* only background fades */</span>
+.hidden { <span class="k">opacity</span>: <span class="v">0</span>; <span class="k">pointer-events</span>: <span class="v">none</span>; }        <span class="c">/* invisible but still takes space */</span></div>
+  <div class="demo-label">Live preview</div>
+  <div class="demo-box">
+    <div class="ctl"><span>opacity</span><input type="range" id="opRange" min="0" max="1" step="0.05" value="0.5"><output id="opO">0.5</output></div>
+    <div class="op-grid">
+      <div><div class="op-bg"><div class="op-box" id="opBox">opacity: 0.5</div></div><p style="font-size:13px;text-align:center;margin:6px 0 0">Text fades too</p></div>
+      <div><div class="op-bg"><div class="op-box" id="rgbaBox" style="background:rgba(255,161,0,.5)">rgba(…, 0.5)</div></div><p style="font-size:13px;text-align:center;margin:6px 0 0">Only background fades</p></div>
+    </div>
+  </div>
+  <div class="note">Remember: <code class="i">opacity: 0</code> still occupies space and still receives clicks. Use <code class="i">display:none</code> or <code class="i">pointer-events:none</code> if needed.</div>
+</section>
+
+<!-- 9 OVERFLOW -->
+<section id="overflow">
+  <h2><span class="num">10</span>overflow</h2>
+  <p>When content is bigger than its box, <code class="i">overflow</code> decides what happens.</p>
+  <table class="vals">
+    <tr><th>Value</th><th>Result</th></tr>
+    <tr><td><code class="i">visible</code> (default)</td><td>Content spills outside the box</td></tr>
+    <tr><td><code class="i">hidden</code></td><td>Extra content is clipped</td></tr>
+    <tr><td><code class="i">scroll</code></td><td>Scrollbars always shown</td></tr>
+    <tr><td><code class="i">auto</code></td><td>Scrollbars only when needed</td></tr>
+  </table>
+  <div class="code-hint" id="ovCode"></div>
+  <div class="demo-label">Live preview – pick a value</div>
+  <div class="demo-box">
+    <div class="btn-row" id="ovBtns">
+      <button data-ov="visible" class="active">visible</button><button data-ov="hidden">hidden</button><button data-ov="scroll">scroll</button><button data-ov="auto">auto</button><button data-ov="overflow-y">overflow-x:hidden; overflow-y:auto</button>
+    </div>
+    <div class="ov-wrap">
+      <div class="ov-box" id="ovBox">This is a long paragraph that is much bigger than the small box it lives in. Keep reading to see what each overflow value does with the extra text that does not fit. Scroll, clip or spill — you decide!</div>
+    </div>
+  </div>
+  <h3>Single-line ellipsis</h3>
+  <div class="code-hint">.ell { <span class="k">white-space</span>: <span class="v">nowrap</span>; <span class="k">overflow</span>: <span class="v">hidden</span>; <span class="k">text-overflow</span>: <span class="v">ellipsis</span>; }</div>
+  <div class="demo-box"><div class="ell">This very long single line of text is truncated with three dots at the end</div></div>
+  <div class="note"><code class="i">overflow: hidden</code> is also how you make <code class="i">border-radius</code> clip images and child elements, and how you contain floats.</div>
+</section>
+
+<!-- 10 SHADOWS -->
+<section id="shadows">
+  <h2><span class="num">11</span>Shadows: box-shadow &amp; text-shadow</h2>
+  <p><b>box-shadow</b>: <code class="i">x-offset y-offset blur spread color</code> (add <code class="i">inset</code> for an inner shadow). <b>text-shadow</b>: <code class="i">x-offset y-offset blur color</code> (no spread, no inset). Multiple shadows are separated by commas.</p>
+  <div class="code-hint" id="shCode"></div>
+  <div class="demo-label">Box-shadow generator</div>
+  <div class="demo-box">
+    <div class="two-col">
+      <div>
+        <div class="ctl"><span>x offset</span><input type="range" id="shX" min="-40" max="40" value="0"><output id="shXo">0px</output></div>
+        <div class="ctl"><span>y offset</span><input type="range" id="shY" min="-40" max="40" value="10"><output id="shYo">10px</output></div>
+        <div class="ctl"><span>blur</span><input type="range" id="shB" min="0" max="80" value="30"><output id="shBo">30px</output></div>
+        <div class="ctl"><span>spread</span><input type="range" id="shS" min="-30" max="30" value="0"><output id="shSo">0px</output></div>
+        <div class="ctl"><span>opacity</span><input type="range" id="shA" min="0" max="1" step="0.05" value="0.25"><output id="shAo">0.25</output></div>
+        <div class="ctl"><span>color</span><input type="color" id="shC" value="#ffa100"><output></output></div>
+        <label style="font-size:13px"><input type="checkbox" id="shI"> inset</label>
+        <div class="btn-row" style="margin-top:10px" id="shPresets">
+          <button data-p="soft">Soft</button><button data-p="layered">Layered</button><button data-p="hard">Hard / retro</button><button data-p="glow">Glow</button>
+        </div>
+      </div>
+      <div class="sh-stage"><div class="sh-box" id="shBox">box-shadow</div></div>
+    </div>
+  </div>
+
+  <div class="demo-label">Text-shadow styles</div>
+  <div class="demo-box">
+    <div class="btn-row" id="txBtns">
+      <button data-t="soft" class="active">Soft</button><button data-t="neon">Neon glow</button><button data-t="retro">Retro 3D</button><button data-t="outline">Outline</button>
+    </div>
+    <div class="tx-stage"><p class="tx-demo" id="txDemo">Shadow</p></div>
+    <div class="code-hint" id="txCode"></div>
+  </div>
+</section>
+
+<!-- ACTIVITIES -->
+<section id="activities">
+  <h2><span class="num">12</span>Practical Activity Solutions</h2>
+  <p>Two complete, real-world examples that combine every rule from this guide. Study the code, then try to rebuild them yourself in the playground.</p>
+
+  <h3>Activity 1 – Profile card</h3>
+  <p>Uses: <code class="i">relative</code> + <code class="i">absolute</code> avatar, <code class="i">::after</code> online dot, <code class="i">::before</code> button sweep, <code class="i">overflow: hidden</code>, <code class="i">z-index</code>, shadows and transitions.</p>
+  <div class="demo-label">Live preview</div>
+  <div class="demo-box" id="pcDemo" style="padding:30px 18px"></div>
+  <div class="demo-label">HTML</div><div class="code-hint" id="pcHtml"></div>
+  <div class="demo-label">CSS</div><div class="code-hint" id="pcCss"></div>
+
+  <h3>Activity 2 – Responsive product grid</h3>
+  <p>Uses: CSS Grid <code class="i">auto-fit</code>, <code class="i">::before</code> label with <code class="i">attr()</code>, <code class="i">::after</code> hover overlay faded with <code class="i">opacity</code> + <code class="i">transition</code>, and <code class="i">z-index</code>. <b>Drag the bottom-right corner of the box to resize it</b> and watch the columns adapt.</p>
+  <div class="demo-label">Live preview (resizable)</div>
+  <div class="demo-box" style="padding:12px"><div id="rlDemo" style="resize:horizontal;overflow:auto;max-width:100%;min-width:180px;padding:10px;border:1px dashed #999999;border-radius:8px;background:#fff"></div></div>
+  <div class="demo-label">HTML</div><div class="code-hint" id="rlHtml"></div>
+  <div class="demo-label">CSS</div><div class="code-hint" id="rlCss"></div>
+</section>
+
+<!-- PLAYGROUND -->
+<div class="playground" id="playground">
+  <h2>🧪 Hands-On Playground</h2>
+  <p>Three tasks of increasing difficulty. Edit the code and watch the preview update as you type.</p>
+  <div class="tabs" id="pgTabs"></div>
+  <div class="instr" id="pgInstr"></div>
+  <div class="presets" id="pgPresets"></div>
+  <div class="ide">
+    <div class="pane"><label><span><b>●</b> HTML</span><i>index.html</i></label><textarea id="htmlEd" spellcheck="false" oninput="run()"></textarea></div>
+    <div class="pane"><label><span><b>●</b> CSS</span><i>style.css</i></label><textarea id="cssEd" spellcheck="false" oninput="run()"></textarea></div>
+  </div>
+  <div class="pane preview"><label><span><b>●</b> Live preview</span><i>updates automatically</i></label><iframe id="frame" title="Live preview"></iframe></div>
+  <div class="ctrls">
+    <button class="b-reset" id="btnReset">↺ Reset starter code</button>
+    <button class="b-sol" id="btnSol">💡 Show solution</button>
+    <span class="msg" id="pgMsg"></span>
+  </div>
+</div>
+
+</main>
+<footer>Built as a single self-contained file · HTML + CSS + JavaScript</footer>
+
+<script>
+/* ---------- helpers ---------- */
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+/* ---------- progress bar + fixed button ---------- */
+addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const p = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
+  $('#prog').style.width = (p * 100) + '%';
+}, {passive:true});
+$('#toTop').onclick = () => scrollTo({top:0, behavior:'smooth'});
+$('#toggleFixed').onclick = () => $('#toTop').classList.toggle('hide');
+
+/* ---------- 1. position demo ---------- */
+const pos = {v:'static'};
+function updPos(){
+  const t = $('#posTarget'), top = $('#posTop').value, left = $('#posLeft').value;
+  $('#posTopO').textContent = top + 'px'; $('#posLeftO').textContent = left + 'px';
+  t.style.position = pos.v;
+  const isS = pos.v === 'static';
+  t.style.top = isS ? '' : top + 'px'; t.style.left = isS ? '' : left + 'px';
+  $('#posTop').disabled = $('#posLeft').disabled = isS;
+  $('#posCode').innerHTML = '<span class="c">/* the orange box */</span>\n.target {\n  <span class="k">position</span>: <span class="v">' + pos.v + '</span>;' +
+    (isS ? '\n  <span class="c">/* top & left are ignored on static */</span>' : '\n  <span class="k">top</span>: <span class="v">' + top + 'px</span>;\n  <span class="k">left</span>: <span class="v">' + left + 'px</span>;') + '\n}';
+}
+$$('#posBtns button').forEach(b => b.onclick = () => { pos.v = b.dataset.pos; $$('#posBtns button').forEach(x => x.classList.toggle('active', x === b)); updPos(); });
+$('#posTop').oninput = $('#posLeft').oninput = updPos; updPos();
+
+/* ---------- 5. z-index ---------- */
+['A','B','C'].forEach(k => {
+  const r = $('#z' + k), o = $('#z' + k + 'o'), b = $('#zBox' + k);
+  const f = () => { o.textContent = r.value; b.style.zIndex = r.value; };
+  r.oninput = f; f();
+});
+
+/* ---------- pseudo-classes ---------- */
+(function(){
+  const dyn = document.createElement('style'); document.head.appendChild(dyn);
+  function setSel(sel){
+    dyn.textContent = '.pk-list ' + sel + '{background:#ffa100;font-weight:700}';
+    $('#pkCode').innerHTML = '.list <span class="k">' + esc(sel) + '</span> {\n  <span class="k">background</span>: <span class="v">#ffa100</span>;\n  <span class="k">font-weight</span>: <span class="v">700</span>;\n}';
+  }
+  $$('#pkBtns button').forEach(b => b.onclick = () => { $$('#pkBtns button').forEach(x => x.classList.toggle('active', x === b)); setSel(b.dataset.sel); });
+  setSel('li:first-child');
+  $('#pkDis').onchange = e => { $('#pkBtn').disabled = $('#pkInput').disabled = e.target.checked; };
+})();
+
+/* ---------- 7. transitions ---------- */
+const trTimings = {ease:'ease'};
+function updTr(){
+  const d = $('#trDur').value, l = $('#trDel').value, st = $('#trStage');
+  $('#trDurO').textContent = d + 's'; $('#trDelO').textContent = l + 's';
+  st.style.setProperty('--dur', d + 's'); st.style.setProperty('--delay', l + 's');
+  $('#trCode').innerHTML = '.knob {\n  <span class="k">transition-property</span>: <span class="v">left</span>;\n  <span class="k">transition-duration</span>: <span class="v">' + d + 's</span>;\n  <span class="k">transition-timing-function</span>: <span class="v">ease</span>;\n  <span class="k">transition-delay</span>: <span class="v">' + l + 's</span>;\n}\n<span class="c">/* shorthand */</span>\n.knob { <span class="k">transition</span>: <span class="v">left ' + d + 's ease ' + l + 's</span>; }';
+}
+$('#trDur').oninput = $('#trDel').oninput = updTr; updTr();
+$('#trPlay').onclick = () => $('#trStage').classList.toggle('go');
+
+/* ---------- 8. opacity ---------- */
+$('#opRange').oninput = e => { const v = e.target.value; $('#opO').textContent = v; $('#opBox').style.opacity = v; $('#opBox').textContent = 'opacity: ' + v; $('#rgbaBox').style.background = 'rgba(255,161,0,' + v + ')'; $('#rgbaBox').textContent = 'rgba(…, ' + v + ')'; };
+$('#opBox').style.opacity = .5;
+
+/* ---------- 9. overflow ---------- */
+function setOv(v){
+  const b = $('#ovBox');
+  b.style.overflow = ''; b.style.overflowX = ''; b.style.overflowY = '';
+  let css;
+  if (v === 'overflow-y'){ b.style.overflowX = 'hidden'; b.style.overflowY = 'auto'; css = '  <span class="k">overflow-x</span>: <span class="v">hidden</span>;\n  <span class="k">overflow-y</span>: <span class="v">auto</span>;'; }
+  else { b.style.overflow = v; css = '  <span class="k">overflow</span>: <span class="v">' + v + '</span>;'; }
+  $('#ovCode').innerHTML = '.box {\n  <span class="k">width</span>: <span class="v">230px</span>;\n  <span class="k">height</span>: <span class="v">110px</span>;\n' + css + '\n}';
+}
+$$('#ovBtns button').forEach(b => b.onclick = () => { $$('#ovBtns button').forEach(x => x.classList.toggle('active', x === b)); setOv(b.dataset.ov); });
+setOv('visible');
+
+/* ---------- 10. shadows ---------- */
+function hex2rgb(h){ const n = parseInt(h.slice(1), 16); return [n>>16 & 255, n>>8 & 255, n & 255]; }
+function updSh(){
+  const x = $('#shX').value, y = $('#shY').value, b = $('#shB').value, s = $('#shS').value, a = $('#shA').value, c = hex2rgb($('#shC').value), ins = $('#shI').checked;
+  $('#shXo').textContent = x + 'px'; $('#shYo').textContent = y + 'px'; $('#shBo').textContent = b + 'px'; $('#shSo').textContent = s + 'px'; $('#shAo').textContent = a;
+  const val = (ins ? 'inset ' : '') + x + 'px ' + y + 'px ' + b + 'px ' + s + 'px rgba(' + c.join(', ') + ', ' + a + ')';
+  $('#shBox').style.boxShadow = val;
+  $('#shCode').innerHTML = '.box { <span class="k">box-shadow</span>: <span class="v">' + val + '</span>; }';
+}
+$$('#shX,#shY,#shB,#shS,#shA,#shC,#shI').forEach(e => e.oninput = updSh); updSh();
+const shP = {
+  soft:{x:0,y:10,b:30,s:0,a:.25,c:'#ffa100',i:false},
+  layered:{x:0,y:4,b:8,s:0,a:.2,c:'#0a0a0a',i:false},
+  hard:{x:8,y:8,b:0,s:0,a:.9,c:'#0a0a0a',i:false},
+  glow:{x:0,y:0,b:30,s:4,a:.7,c:'#ffd400',i:false}
+};
+$$('#shPresets button').forEach(btn => btn.onclick = () => {
+  const p = shP[btn.dataset.p];
+  $('#shX').value = p.x; $('#shY').value = p.y; $('#shB').value = p.b; $('#shS').value = p.s; $('#shA').value = p.a; $('#shC').value = p.c; $('#shI').checked = p.i;
+  updSh();
+  if (btn.dataset.p === 'layered') { const v = '0 1px 2px rgba(0,0,0,.2), 0 4px 8px rgba(0,0,0,.15), 0 12px 24px rgba(0,0,0,.12)'; $('#shBox').style.boxShadow = v; $('#shCode').innerHTML = '.box { <span class="k">box-shadow</span>: <span class="v">' + v + '</span>; }  <span class="c">/* several layers */</span>'; }
+});
+const txP = {
+  soft:'2px 3px 6px rgba(0,0,0,.6)',
+  neon:'0 0 6px #fff, 0 0 18px #ffd400, 0 0 36px #ffd400',
+  retro:'3px 3px 0 #ffd400, 6px 6px 0 #ffa100',
+  outline:'-2px -2px 0 #ffd400, 2px -2px 0 #ffd400, -2px 2px 0 #ffd400, 2px 2px 0 #ffd400'
+};
+function setTx(k){ $('#txDemo').style.textShadow = txP[k]; $('#txCode').innerHTML = '.title { <span class="k">text-shadow</span>: <span class="v">' + txP[k] + '</span>; }'; }
+$$('#txBtns button').forEach(b => b.onclick = () => { $$('#txBtns button').forEach(x => x.classList.toggle('active', x === b)); setTx(b.dataset.t); });
+setTx('soft');
+
+/* ---------- 11. Activities (CSS is injected AND displayed, so code = demo) ---------- */
+const PC_HTML = `<article class="pc-card">
+  <div class="pc-cover"></div>
+  <div class="pc-avatar">SA</div>
+  <div class="pc-body">
+    <h3>Sara Ahmed</h3>
+    <p class="pc-role">Front-end Developer</p>
+    <p>I build clean, responsive interfaces.</p>
+    <div class="pc-tags"><span>HTML</span><span>CSS</span><span>JS</span></div>
+    <a href="#" class="pc-btn">Follow</a>
+  </div>
+</article>`;
+const PC_CSS = `.pc-card {
+  position: relative;            /* anchor for the avatar */
+  width: 280px;
+  margin: auto;
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;              /* clip cover to the rounded corners */
+  box-shadow: 0 4px 12px rgba(0,0,0,.08);
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+.pc-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 35px rgba(255,161,0,.25);
+}
+.pc-cover { height: 90px; background: linear-gradient(135deg,#ffa100,#ffd400); }
+.pc-avatar {
+  position: absolute; top: 50px; left: 50%;
+  transform: translateX(-50%);
+  width: 80px; height: 80px; border-radius: 50%;
+  background: #fff; border: 4px solid #fff;
+  display: grid; place-items: center;
+  font-weight: 700; color: #000;
+  box-shadow: 0 4px 10px rgba(0,0,0,.2);
+  z-index: 2;                    /* above the cover */
+}
+.pc-avatar::after {              /* online dot */
+  content: "";
+  position: absolute; right: 2px; bottom: 2px;
+  width: 14px; height: 14px;
+  background: #ffa100; border: 2px solid #fff; border-radius: 50%;
+}
+.pc-body { padding: 50px 20px 22px; text-align: center; }
+.pc-body h3 { margin: 0; text-shadow: 0 1px 0 rgba(0,0,0,.08); }
+.pc-role { color: #000; font-weight: 600; margin: 2px 0 10px; }
+.pc-tags { display: flex; gap: 6px; justify-content: center; margin: 12px 0 16px; }
+.pc-tags span { font-size: 12px; background: #fff4d6; color: #000000; padding: 3px 10px; border-radius: 999px; }
+.pc-btn {
+  position: relative; isolation: isolate; overflow: hidden;
+  display: inline-block; padding: 9px 26px;
+  border: 2px solid #ffa100; border-radius: 999px;
+  color: #000; font-weight: 600; text-decoration: none;
+  transition: color .3s ease;
+}
+.pc-btn::before {                /* sweeping fill */
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: #ffa100;
+  transform: translateX(-101%);
+  transition: transform .3s ease;
+}
+.pc-btn:hover { color: #000; }
+.pc-btn:hover::before { transform: translateX(0); }`;
+
+const RL_HTML = `<div class="rl-grid">
+  <div class="rl-item">
+    <div class="rl-img" data-label="SALE">🎧</div>
+    <h4>Headphones</h4><p>$59</p>
+  </div>
+  <div class="rl-item">
+    <div class="rl-img" data-label="NEW">⌚</div>
+    <h4>Smart Watch</h4><p>$120</p>
+  </div>
+  <div class="rl-item">
+    <div class="rl-img" data-label="HOT">📷</div>
+    <h4>Camera</h4><p>$340</p>
+  </div>
+  <div class="rl-item">
+    <div class="rl-img" data-label="-20%">🎮</div>
+    <h4>Game Pad</h4><p>$45</p>
+  </div>
+</div>`;
+const RL_CSS = `.rl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));  /* responsive! */
+  gap: 14px;
+}
+.rl-item {
+  background: #fff; border-radius: 12px; overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,.08), 0 8px 20px rgba(0,0,0,.06);
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+.rl-item:hover { transform: translateY(-5px); box-shadow: 0 14px 30px rgba(255,161,0,.25); }
+.rl-item h4 { margin: 10px 12px 0; }
+.rl-item p  { margin: 2px 12px 12px; color: #000; font-weight: 700; }
+.rl-img {
+  position: relative;            /* anchor for pseudo-elements */
+  height: 110px; display: grid; place-items: center;
+  font-size: 42px; background: linear-gradient(135deg,#ffe9b0,#fff3c4);
+}
+.rl-img::before {                /* label from data-label */
+  content: attr(data-label);
+  position: absolute; top: 8px; left: 8px;
+  font-size: 11px; font-weight: 700;
+  background: #000000; color: #fff;
+  padding: 2px 8px; border-radius: 999px;
+  z-index: 2;                    /* stays above the overlay */
+}
+.rl-img::after {                 /* hover overlay */
+  content: "Quick view";
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  background: rgba(0,0,0,.7); color: #fff;
+  font-size: 14px; font-weight: 600;
+  opacity: 0;
+  transition: opacity .3s ease;
+}
+.rl-item:hover .rl-img::after { opacity: 1; }`;
+
+(function(){
+  const st = document.createElement('style'); st.textContent = PC_CSS + '\n' + RL_CSS; document.head.appendChild(st);
+  $('#pcDemo').innerHTML = PC_HTML; $('#rlDemo').innerHTML = RL_HTML;
+  $('#pcHtml').textContent = PC_HTML; $('#pcCss').textContent = PC_CSS;
+  $('#rlHtml').textContent = RL_HTML; $('#rlCss').textContent = RL_CSS;
+})();
+
+/* ---------- PLAYGROUND ---------- */
+const TASKS = [
+{
+  name:'Task 1', level:'Easy', title:'Position & z-index: badge and ribbon on a card',
+  goal:`<p>Right now the <b>HOT</b> ribbon and the <b>NEW</b> badge are plain inline text. Turn them into corner decorations.</p>
+  <ol>
+    <li>Make <code>.card</code> the anchor with <code>position: relative</code>.</li>
+    <li>Place <code>.badge</code> at the top-right corner so it sticks out (<code>top: -12px; right: -12px</code>) using <code>position: absolute</code>.</li>
+    <li>Place <code>.ribbon</code> absolutely at <code>top: -12px; right: 14px</code> so it partly overlaps the badge.</li>
+    <li>The ribbon comes <i>first</i> in the HTML, so the badge covers it. Use <code>z-index</code> so the <b>ribbon is on top</b>.</li>
+  </ol>`,
+  html:`<div class="card">
+  <span class="ribbon">HOT</span>
+  <span class="badge">NEW</span>
+  <h3>Wireless Headphones</h3>
+  <p>Noise-cancelling, 30h battery life.</p>
+</div>`,
+  css:`.card {
+  width: 260px;
+  margin: 50px auto;
+  padding: 24px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.12);
+}
+
+.badge {
+  background: #000000;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.ribbon {
+  background: #ffd400;
+  color: #000;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+`,
+  presets:[
+    {label:'card: relative', t:'css', code:'\n.card { position: relative; }\n'},
+    {label:'badge: absolute', t:'css', code:'\n.badge { position: absolute; top: -12px; right: -12px; }\n'},
+    {label:'ribbon: absolute', t:'css', code:'\n.ribbon { position: absolute; top: -12px; right: 14px; }\n'},
+    {label:'z-index: 3', t:'css', code:'\n.ribbon { z-index: 3; }\n.badge { z-index: 2; }\n'},
+    {label:'+ drop shadow', t:'css', code:'\n.ribbon { box-shadow: 0 2px 6px rgba(0,0,0,.35); }\n'}
+  ],
+  sol:{html:null, css:`.card {
+  position: relative;
+  width: 260px;
+  margin: 50px auto;
+  padding: 24px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.12);
+}
+
+.badge {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  z-index: 2;
+  background: #000000;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.ribbon {
+  position: absolute;
+  top: -12px;
+  right: 14px;
+  z-index: 3;            /* higher than the badge */
+  background: #ffd400;
+  color: #000;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.35);
+}
+`}
+},
+{
+  name:'Task 2', level:'Medium', title:'Pseudo-elements, transitions & opacity: hover tile',
+  goal:`<p>Build a hover effect for the tile and the link using only CSS pseudo-elements.</p>
+  <ol>
+    <li>Create <code>.tile::before</code> as a dark overlay: <code>content:""; position:absolute; inset:0; background: rgba(0,0,0,.85); opacity:0;</code></li>
+    <li>On <code>.tile:hover::before</code> set <code>opacity: 1</code> and add <code>transition: opacity .4s ease</code> on the base rule.</li>
+    <li>Create <code>.tile::after</code> with <code>content:"Explore →"</code> at the bottom-right. Start with <code>opacity:0; transform: translateY(12px)</code>, reveal on hover with <code>transition-delay: .15s</code>.</li>
+    <li>Keep the tile text above the overlay with <code>position: relative; z-index: 1</code>, and turn it white on hover with a <code>color</code> transition.</li>
+    <li>Bonus: animated underline on <code>.link::after</code> using <code>transform: scaleX(0)</code> → <code>scaleX(1)</code>.</li>
+  </ol>`,
+  html:`<div class="tile">
+  <h3>Mountain Trip</h3>
+  <p>Hover the tile to reveal the overlay</p>
+</div>
+
+<a href="#" class="link">Read more</a>`,
+  css:`.tile {
+  position: relative;
+  width: 300px;
+  height: 180px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 14px;
+  color: #000;
+  background: linear-gradient(135deg, #ffd400, #ffa100);
+  overflow: hidden;
+}
+
+.link {
+  display: block;
+  width: max-content;
+  margin: 20px auto;
+  color: #000;
+  text-decoration: none;
+  font-weight: 600;
+}
+`,
+  presets:[
+    {label:'::before overlay', t:'css', code:'\n.tile::before {\n  content: "";\n  position: absolute;\n  inset: 0;\n  background: rgba(0,0,0,.85);\n  opacity: 0;\n  transition: opacity .4s ease;\n}\n'},
+    {label:'hover: show overlay', t:'css', code:'\n.tile:hover::before { opacity: 1; }\n'},
+    {label:'::after label', t:'css', code:'\n.tile::after {\n  content: "Explore →";\n  color: #ffd400;\n  position: absolute;\n  right: 20px;\n  bottom: 16px;\n  font-weight: 600;\n  opacity: 0;\n  transform: translateY(12px);\n  transition: opacity .4s ease .15s, transform .4s ease .15s;\n}\n.tile:hover::after { opacity: 1; transform: translateY(0); }\n'},
+    {label:'text above overlay', t:'css', code:'\n.tile h3, .tile p { position: relative; z-index: 1; margin: 0 0 8px; transition: color .4s ease; }\n.tile:hover h3, .tile:hover p { color: #fff; }\n'},
+    {label:'link underline', t:'css', code:'\n.link { position: relative; }\n.link::after {\n  content: "";\n  position: absolute;\n  left: 0; bottom: -3px;\n  width: 100%; height: 2px;\n  background: currentColor;\n  transform: scaleX(0);\n  transform-origin: left;\n  transition: transform .3s ease-in-out;\n}\n.link:hover::after { transform: scaleX(1); }\n'}
+  ],
+  sol:{html:null, css:`.tile {
+  position: relative;
+  width: 300px;
+  height: 180px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 14px;
+  color: #000;
+  background: linear-gradient(135deg, #ffd400, #ffa100);
+  overflow: hidden;
+}
+
+.tile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.85);
+  opacity: 0;
+  transition: opacity .4s ease;
+}
+.tile:hover::before { opacity: 1; }
+
+.tile::after {
+  content: "Explore →";
+  color: #ffd400;
+  position: absolute;
+  right: 20px;
+  bottom: 16px;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity .4s ease .15s, transform .4s ease .15s;
+}
+.tile:hover::after { opacity: 1; transform: translateY(0); }
+
+.tile h3, .tile p { position: relative; z-index: 1; margin: 0 0 8px; transition: color .4s ease; }
+.tile:hover h3, .tile:hover p { color: #fff; }
+
+.link {
+  position: relative;
+  display: block;
+  width: max-content;
+  margin: 20px auto;
+  color: #000;
+  text-decoration: none;
+  font-weight: 600;
+}
+.link::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: -3px;
+  width: 100%; height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .3s ease-in-out;
+}
+.link:hover::after { transform: scaleX(1); }
+`}
+},
+{
+  name:'Task 3', level:'Hard', title:'Overflow & shadows: a polished notification panel',
+  goal:`<p>The long notifications overflow the panel. Fix the layout and polish it using everything you have learned.</p>
+  <ol>
+    <li><code>.list</code>: limit the height with <code>max-height: 210px</code> and make it scroll vertically only: <code>overflow-y: auto; overflow-x: hidden;</code></li>
+    <li><code>.list li</code>: truncate long lines with <code>overflow: hidden; text-overflow: ellipsis;</code> (the <code>nowrap</code> is already there).</li>
+    <li><code>.panel</code>: add <code>overflow: hidden</code> so the rounded corners clip the header, and a <b>layered box-shadow</b> (two shadows separated by a comma).</li>
+    <li><code>.title</code>: use a gradient background, white text and a <code>text-shadow</code>.</li>
+    <li>Add an <b>inset shadow</b> on <code>.list</code> to hint that it scrolls: <code>inset 0 -10px 10px -10px rgba(0,0,0,.35)</code>.</li>
+    <li>Make rows react on hover with a <code>transition</code> (background and padding), and lift the panel on hover.</li>
+  </ol>`,
+  html:`<div class="panel">
+  <h3 class="title">Notifications</h3>
+  <ul class="list">
+    <li>New comment on your post "Learning CSS positioning the easy way"</li>
+    <li>Sara started following you</li>
+    <li>Your project build finished successfully in 2 minutes</li>
+    <li>Reminder: team meeting at 3 PM tomorrow in room B</li>
+    <li>Ahmed liked your photo</li>
+    <li>Your weekly report is ready to download now</li>
+    <li>Security alert: new login from Chrome on Windows</li>
+  </ul>
+</div>`,
+  css:`.panel {
+  width: 320px;
+  margin: 20px auto;
+  background: #fff;
+  border-radius: 14px;
+}
+
+.title {
+  margin: 0;
+  padding: 16px 20px;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.list li {
+  padding: 14px 20px;
+  border-top: 1px solid #efe7d2;
+  white-space: nowrap;
+}
+`,
+  presets:[
+    {label:'scrollable list', t:'css', code:'\n.list { max-height: 210px; overflow-y: auto; overflow-x: hidden; }\n'},
+    {label:'ellipsis', t:'css', code:'\n.list li { overflow: hidden; text-overflow: ellipsis; }\n'},
+    {label:'panel: clip + layered shadow', t:'css', code:'\n.panel {\n  overflow: hidden;\n  box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 8px 24px rgba(0,0,0,.12);\n}\n'},
+    {label:'title: gradient + text-shadow', t:'css', code:'\n.title {\n  background: linear-gradient(135deg, #ffa100, #ffd400);\n  color: #fff;\n  text-shadow: 0 2px 4px rgba(255,255,255,.6);\n}\n'},
+    {label:'inset shadow', t:'css', code:'\n.list { box-shadow: inset 0 -10px 10px -10px rgba(0,0,0,.35); }\n'},
+    {label:'hover + transition', t:'css', code:'\n.panel { transition: box-shadow .3s ease, transform .3s ease; }\n.panel:hover { transform: translateY(-4px); box-shadow: 0 2px 4px rgba(0,0,0,.08), 0 18px 40px rgba(255,161,0,.25); }\n.list li { transition: background .25s ease, padding-left .25s ease; }\n.list li:hover { background: #fff4d6; padding-left: 28px; }\n'}
+  ],
+  sol:{html:null, css:`.panel {
+  width: 320px;
+  margin: 20px auto;
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 8px 24px rgba(0,0,0,.12);
+  transition: box-shadow .3s ease, transform .3s ease;
+}
+.panel:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 2px 4px rgba(0,0,0,.08), 0 18px 40px rgba(255,161,0,.25);
+}
+
+.title {
+  margin: 0;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #ffa100, #ffd400);
+  color: #000;
+  text-shadow: 0 2px 4px rgba(255,255,255,.6);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 210px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: inset 0 -10px 10px -10px rgba(0,0,0,.35);
+}
+
+.list li {
+  padding: 14px 20px;
+  border-top: 1px solid #efe7d2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background .25s ease, padding-left .25s ease;
+}
+.list li:hover {
+  background: #fff4d6;
+  padding-left: 28px;
+}
+`}
+}
+];
+
+let cur = 0, showingSol = false, saved = null;
+const htmlEd = $('#htmlEd'), cssEd = $('#cssEd'), frame = $('#frame');
+
+function run(){
+  frame.srcdoc = '<!doctype html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}body{margin:0;padding:18px;font-family:Inter,system-ui,sans-serif;background:#fff8e6;color:#1a1a1a}</style><style>' + cssEd.value + '</style></head><body>' + htmlEd.value + '</body></html>';
+}
+
+function buildTabs(){
+  $('#pgTabs').innerHTML = '';
+  TASKS.forEach((t, i) => {
+    const b = document.createElement('button');
+    b.innerHTML = t.name + '<span class="lvl">' + t.level + '</span>';
+    b.onclick = () => load(i);
+    $('#pgTabs').appendChild(b);
+  });
+}
+
+function load(i){
+  cur = i; showingSol = false; saved = null;
+  const T = TASKS[i];
+  $$('#pgTabs button').forEach((b, j) => b.classList.toggle('active', j === i));
+  $('#pgInstr').innerHTML = '<h3>' + T.name + ' — ' + T.title + '</h3>' + T.goal;
+  $('#pgPresets').innerHTML = '<span>Quick presets (click to insert):</span>';
+  T.presets.forEach(p => {
+    const b = document.createElement('button');
+    b.textContent = p.label;
+    b.onclick = () => insertPreset(p);
+    $('#pgPresets').appendChild(b);
+  });
+  htmlEd.value = T.html; cssEd.value = T.css;
+  $('#btnSol').textContent = '💡 Show solution';
+  $('#pgMsg').textContent = '';
+  run();
+}
+
+function insertPreset(p){
+  const ed = p.t === 'html' ? htmlEd : cssEd;
+  ed.value = ed.value.replace(/\s*$/, '') + '\n' + p.code;
+  ed.scrollTop = ed.scrollHeight;
+  run();
+}
+
+$('#btnReset').onclick = () => { load(cur); $('#pgMsg').textContent = 'Starter code restored.'; };
+
+$('#btnSol').onclick = () => {
+  const T = TASKS[cur];
+  if (!showingSol){
+    saved = {h: htmlEd.value, c: cssEd.value};
+    htmlEd.value = T.sol.html || T.html; cssEd.value = T.sol.css;
+    showingSol = true; $('#btnSol').textContent = '↩ Back to my code';
+    $('#pgMsg').textContent = 'Solution shown. Try to understand every rule!';
+  } else {
+    htmlEd.value = saved.h; cssEd.value = saved.c;
+    showingSol = false; $('#btnSol').textContent = '💡 Show solution';
+    $('#pgMsg').textContent = 'Your code is back.';
+  }
+  run();
+};
+
+/* Tab key inserts two spaces inside editors */
+[htmlEd, cssEd].forEach(ed => ed.addEventListener('keydown', e => {
+  if (e.key === 'Tab'){
+    e.preventDefault();
+    const s = ed.selectionStart;
+    ed.value = ed.value.slice(0, s) + '  ' + ed.value.slice(ed.selectionEnd);
+    ed.selectionStart = ed.selectionEnd = s + 2;
+    run();
+  }
+}));
+
+buildTabs(); load(0);
+</script>
+</body>
+</html>
