@@ -12,8 +12,6 @@ A progressive guide to eight core CSS topics. Each section starts with a short e
 6. [Opacity](#6-opacity)
 7. [Overflow](#7-overflow)
 8. [Shadows (text and box)](#8-shadows-text--box)
-9. [Final Project: Product Card Grid](#9-final-project-product-card-grid)
-10. [Cheat Sheet](#10-cheat-sheet)
 
 ---
 
@@ -1741,78 +1739,4 @@ body {
     transition-duration: 0.01ms !important; /* effectively no animation for users who opt out */
   }
 }
-```
-
-### What to try next (practice ideas)
-
-1. Change `.overlay` to slide up from the bottom using `transform: translateY(100%)` instead of fading.
-2. Add a `.card:nth-child(n)` rule using `transition-delay` to stagger the cards' entrance.
-3. Make the header's shadow appear **only after scrolling** (hint: a small JS scroll listener that toggles a class).
-4. Replace the single-line ellipsis with a 2-line clamp.
-
----
-
-## 10. Cheat Sheet
-
-```css
-/* POSITION */
-position: static | relative | absolute | sticky | fixed;
-inset: 0; /* top/right/bottom/left all 0 */
-
-/* Z-INDEX (needs a positioned element or a flex/grid item) */
-z-index: 10;
-isolation: isolate; /* create a safe, local stacking context */
-
-/* PSEUDO-ELEMENTS (content is required) */
-.x::before {
-  content: "";
-}
-.x::after {
-  content: attr(data-label);
-}
-
-/* PSEUDO-CLASSES (single colon = state or position) */
-a:hover {
-}
-button:active {
-}
-input:focus-visible {
-}
-form:focus-within {
-}
-input:checked + .track {
-}
-input:invalid:not(:placeholder-shown) {
-}
-li:nth-child(even) {
-}
-li:last-child {
-}
-li:not(:last-child) {
-}
-:is(h1, h2, h3) {
-}
-:where(.prose) a {
-}
-.card:has(img) {
-}
-
-/* TRANSITIONS: property | duration | timing | delay */
-transition: transform 0.3s ease-out 0s;
-
-/* OPACITY */
-opacity: 0.5; /* affects the element AND its children */
-background: rgb(0 0 0 / 0.5); /* alpha for the background only */
-
-/* OVERFLOW */
-overflow: visible | hidden | scroll | auto | clip;
-text-overflow: ellipsis; /* needs nowrap + overflow: hidden */
-
-/* SHADOWS */
-text-shadow: 0 2px 6px rgb(0 0 0 / 0.4);
-box-shadow: 0 8px 20px rgb(0 0 0 / 0.15);
-box-shadow: inset 0 2px 4px rgb(0 0 0 / 0.2);
-filter: drop-shadow(
-  0 4px 6px rgb(0 0 0 / 0.3)
-); 
 ```
